@@ -1,0 +1,68 @@
+# ElasticsearchAutocomplete
+
+Simple autocomplete for rails models using awesome elasticsearch and tire gem
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'elasticsearch_autocomplete'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install elasticsearch_autocomplete
+
+## Basic Usage
+
+```ruby
+Specify attributes for autocompletion. By default, this is `name` attribute.
+class User < ActiveRecord::Base
+  ac_field :full_name
+end
+```
+
+To find suggestions call `ac_search` method on your class. It return `Tire::Results::Collection`
+
+```ruby
+User.ac_search('Alex')
+User.ac_search('Alex').map(&:full_name)
+=> ['Alex First', 'Alexandr Second']
+```
+
+##
+
+You can specify fields for suggestions search
+
+```ruby
+class User < ActiveRecord::Base
+  ac_field :full_name, :search_fields => [:full_name, :email]
+end
+```
+
+For search on localized fields such as `name_en`, `name_ru`
+
+```ruby
+class Product < ActiveRecord::Base
+  ac_field :name, :localized => true
+end
+```
+
+If you wand to define settings and mapping fof elasticsearch index yourselves
+
+```ruby
+class Product < ActiveRecord::Base
+  ac_field :name, :skip_settings => true
+end
+```
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
