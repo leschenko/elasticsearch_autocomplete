@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Basic Usage
 
-Specify attributes for autocompletion. By default, this is `name` attribute.
+Specify attributes for autocompletion. By default, this is `name` attribute:
 
 ```ruby
 class User < ActiveRecord::Base
@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-To find suggestions call `ac_search` method on your class. It return `Tire::Results::Collection` instance.
+To find suggestions call `ac_search` method on your class. It return `Tire::Results::Collection` instance:
 
 ```ruby
 User.ac_search('Alex').map(&:full_name)
@@ -35,7 +35,7 @@ User.ac_search('Alex').map(&:full_name)
 
 ##
 
-You can specify fields for suggestions search
+You can specify fields for suggestions search:
 
 ```ruby
 class User < ActiveRecord::Base
@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-For search on localized fields such as `name_en`, `name_ru`
+For search on localized fields such as `name_en`, `name_ru`:
 
 ```ruby
 class Product < ActiveRecord::Base
@@ -51,7 +51,7 @@ class Product < ActiveRecord::Base
 end
 ```
 
-If you wand to define settings and mapping for elasticsearch index yourselves
+If you wand to define settings and mapping for elasticsearch index yourselves:
 
 ```ruby
 class Product < ActiveRecord::Base

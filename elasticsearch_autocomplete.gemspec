@@ -9,8 +9,8 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Alex Leschenko"]
   gem.email         = ["leschenko.al@gmail.com"]
   gem.summary       = %q{Elasticsearch autocomplete for rails models}
-  gem.description       = %q{Simple autocomplete for rails models using awesome elasticsearch and tire gem}
-  gem.homepage      = ""
+  gem.description   = %q{Simple autocomplete for rails models using awesome elasticsearch and tire gem}
+  gem.homepage      = "https://github.com/leschenko/elasticsearch_autocomplete"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
