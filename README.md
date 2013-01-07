@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-To find suggestions call `ac_search` method on your class. It return `Tire::Results::Collection` instance:
+To find suggestions call `ac_search` method on your model. It return `Tire::Results::Collection` instance:
 
 ```ruby
 User.ac_search('Alex').map(&:full_name)
