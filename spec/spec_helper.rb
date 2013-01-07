@@ -1,5 +1,6 @@
 require 'active_model'
 require 'tire'
+require 'active_support/core_ext'
 require 'elasticsearch_autocomplete'
 
 Tire.configure do
@@ -9,9 +10,8 @@ Tire.configure do
 end
 
 #load 'spec/spec_helper.rb'
-class StubModelBase
+class ActiveModelBase
   include ActiveModel::AttributeMethods
-  include ActiveModel::Validations
   include ActiveModel::Serialization
   include ActiveModel::Serializers::JSON
   include ActiveModel::Naming
@@ -38,19 +38,17 @@ class StubModelBase
 
   def save
     _run_save_callbacks do
-      #STDERR.puts '[Saving ...]'
     end
   end
 
   def destroy
     _run_destroy_callbacks do
-      #STDERR.puts '[Destroying ...]'
       @destroyed = true
     end
   end
 
-  def destroyed?;
-    !!@destroyed;
+  def destroyed?
+    !!@destroyed
   end
 
   def self.setup_index
@@ -61,7 +59,7 @@ class StubModelBase
   end
 end
 
-class ActiveModelUserBase < StubModelBase
+class StubModelBase < ActiveModelBase
 
   def self.test_data
     ['Joyce Flores', 'Rebecca Nelson', 'Larson Laura', 'Laura Larson']

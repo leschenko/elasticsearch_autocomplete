@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class ActiveModelUserWord < ActiveModelUserBase
+class ActiveModelUserWord < StubModelBase
   ac_field :full_name, :mode => :word
 end
 

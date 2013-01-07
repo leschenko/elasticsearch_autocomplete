@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'search filters' do
-  class ActiveModelUserFilter < ActiveModelUserBase
+  class ActiveModelUserFilter < StubModelBase
     ac_field :full_name
 
     def self.test_data

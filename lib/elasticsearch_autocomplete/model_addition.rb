@@ -11,7 +11,7 @@ module ElasticsearchAutocomplete
           after_save lambda { tire.update_index }
         end
         after_destroy lambda { tire.update_index }
-        #index_prefix Utils.elastic_prefix
+        index_prefix ElasticsearchAutocomplete.defaults[:index_prefix]
       end
 
       def ac_field(*args, &block)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class ActiveModelUser < ActiveModelUserBase
+class ActiveModelUser < StubModelBase
   ac_field :full_name
 end
 
@@ -26,8 +26,8 @@ describe ElasticsearchAutocomplete do
     end
 
     it 'allow to change default settings' do
-      ElasticsearchAutocomplete.defaults = {:attr => :test, :localized => true, :mode => :phrase}
-      ElasticsearchAutocomplete.defaults.should == {:attr => :test, :localized => true, :mode => :phrase}
+      ElasticsearchAutocomplete.defaults = {:attr => :test, :localized => true, :mode => :phrase, :index_prefix => 'test'}
+      ElasticsearchAutocomplete.defaults.should == {:attr => :test, :localized => true, :mode => :phrase, :index_prefix => 'test'}
     end
   end
 end

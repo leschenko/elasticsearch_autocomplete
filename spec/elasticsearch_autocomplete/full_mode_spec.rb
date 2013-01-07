@@ -1,29 +1,49 @@
 require 'spec_helper'
 
-class ActiveModelUserFull < ActiveModelUserBase
-  ac_field :full_name, :mode => :full
+class ActiveModelProductFull < StubModelBase
+  ac_field :sku, :mode => :full
+
+  def self.test_data
+    ['SAMARA', 'A.3103', 'b A.3611', 'kac12 dk/sm']
+  end
+
+  def self.populate
+    test_data.each_with_index do |name, id|
+      u = new(:sku => name)
+      u.id = id
+      u.save
+    end
+  end
 end
 
 describe ':full mode autocomplete' do
+  let(:model) { ActiveModelProductFull }
+
   before :all do
-    ActiveModelUserFull.setup_index
+    model.setup_index
   end
 
   it 'have :full mode' do
-    ActiveModelUserFull.ac_opts[:mode].should == :full
+    model.ac_opts[:mode].should == :full
   end
 
-  it_behaves_like 'basic autocomplete', ActiveModelUserFull
+  it 'suggest for beginning of the source' do
+    model.ac_search('A.31').to_a.should_not be_empty
+  end
+
+  it 'suggest for for full match' do
+    model.ac_search('SAMARA').to_a.should_not be_empty
+  end
+
+  it 'don\'t suggest for unmatched term' do
+    model.ac_search('kac3').to_a.should be_empty
+  end
 
   it 'suggest from the middle of the word' do
-    ActiveModelUserFull.ac_search('becc').to_a.should_not be_empty
-  end
-
-  it 'suggest for each word of the source' do
-    ActiveModelUserFull.ac_search('Flores').map(&:full_name).should == ['Joyce Flores']
+    model.ac_search('/sm').to_a.should_not be_empty
   end
 
   it 'suggest with relevance order' do
-    ActiveModelUserFull.ac_search('Lau').map(&:full_name).should == ['Laura Larson', 'Larson Laura']
+    model.ac_search('A.3').map(&:sku).should == ['A.3103', 'b A.3611']
   end
 end

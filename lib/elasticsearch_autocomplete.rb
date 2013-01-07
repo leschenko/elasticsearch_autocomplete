@@ -4,7 +4,12 @@ require 'elasticsearch_autocomplete/model_addition'
 
 module ElasticsearchAutocomplete
   mattr_accessor :defaults
-  self.defaults = {:attr => :name, :localized => false, :mode => :word}
+
+  def self.default_index_prefix
+    Rails.application.class.name.split('::').first.downcase if Object.const_defined?('Rails')
+  end
+
+  self.defaults = {:attr => :name, :localized => false, :mode => :word, :index_prefix => default_index_prefix}
 
   MODES = {
       :word => {:base => 'ac', :word => 'ac_word'},
