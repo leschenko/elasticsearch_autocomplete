@@ -9,7 +9,8 @@ Tire.configure do
   pretty 1
 end
 
-#load 'spec/spec_helper.rb'
+I18n.available_locales = [:en, :ru]
+
 class ActiveModelBase
   include ActiveModel::AttributeMethods
   include ActiveModel::Serialization
