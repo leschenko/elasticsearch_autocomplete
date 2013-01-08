@@ -12,12 +12,6 @@ module ElasticsearchAutocomplete
             :type => 'nGram',
             :min_gram => 1,
             :max_gram => 50
-        },
-        :ac_edge_ngram_back => {
-            :type => 'edgeNGram',
-            :min_gram => 1,
-            :max_gram => 50,
-            :side => 'back'
         }
     }
 
@@ -39,11 +33,6 @@ module ElasticsearchAutocomplete
         :ac_edge_ngram_full => {
             :type => 'custom',
             :tokenizer => 'ac_edge_ngram_full',
-            :filter => %w(lowercase asciifolding)
-        },
-        :ac_edge_ngram_back => {
-            :type => 'custom',
-            :tokenizer => 'ac_edge_ngram_back',
             :filter => %w(lowercase asciifolding)
         },
         :ac_edge_ngram_word => {

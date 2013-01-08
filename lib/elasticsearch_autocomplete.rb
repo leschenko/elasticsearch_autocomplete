@@ -1,6 +1,7 @@
 require 'elasticsearch_autocomplete/version'
 require 'elasticsearch_autocomplete/analyzers'
 require 'elasticsearch_autocomplete/model_addition'
+require 'elasticsearch_autocomplete/railtie' if defined? Rails
 
 module ElasticsearchAutocomplete
   mattr_accessor :defaults

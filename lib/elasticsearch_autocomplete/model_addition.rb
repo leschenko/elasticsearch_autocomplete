@@ -71,11 +71,11 @@ module ElasticsearchAutocomplete
         {:name => r[attr], :id => r.id}
       end
 
-      private
-
       def ac_mode_config
         ElasticsearchAutocomplete::MODES[ac_opts[:mode]]
       end
+
+      private
 
       def define_ac_index(mode=:word)
         mode_config = ac_mode_config
@@ -86,7 +86,7 @@ module ElasticsearchAutocomplete
                 when :word
                   indexes attr, :type => 'multi_field', :fields => {
                       attr => {:type => 'string'},
-                      "#{mode_config[:base]}_#{attr}" => {:type => 'string', :index_analyzer => 'ac_edge_ngram', :search_analyzer => 'ac_search', :include_in_all => false, :boost => 3},
+                      "#{mode_config[:base]}_#{attr}" => {:type => 'string', :index_analyzer => 'ac_edge_ngram', :search_analyzer => 'ac_search', :include_in_all => false},
                       "#{mode_config[:word]}_#{attr}" => {:type => 'string', :index_analyzer => 'ac_edge_ngram_word', :search_analyzer => 'ac_search', :include_in_all => false}
                   }
                 when :phrase
