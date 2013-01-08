@@ -26,7 +26,7 @@ module ElasticsearchAutocomplete
         self.ac_opts = options.reverse_merge(ElasticsearchAutocomplete.defaults)
         self.ac_attr = args.first || ElasticsearchAutocomplete.defaults[:attr]
 
-        define_ac_index(ac_opts[:mode]) unless options[:no_settings]
+        define_ac_index(ac_opts[:mode]) unless options[:skip_settings]
       end
     end
 
