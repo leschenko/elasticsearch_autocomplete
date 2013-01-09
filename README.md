@@ -26,10 +26,10 @@ class User < ActiveRecord::Base
 end
 ```
 
-Don't forget to create elasticsearch index:
+Don't forget to rebuild elasticsearch index:
 
 ```bash
-    $ rake environment tire:import CLASS='User'
+    $ rake environment tire:import CLASS='User' FORCE=true
 ```
 
 To find suggestions call `ac_search` method on your model. It return `Tire::Results::Collection` instance:
