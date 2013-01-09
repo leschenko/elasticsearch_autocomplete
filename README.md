@@ -1,6 +1,6 @@
 # ElasticsearchAutocomplete
 
-Simple autocomplete for rails models using awesome elasticsearch and tire gem
+Simple autocomplete for rails models using awesome [Elasticsearch](http://www.elasticsearch.org/) and [tire](https://github.com/karmi/tire) gem
 
 ## Installation
 
@@ -24,6 +24,12 @@ Specify attributes for autocompletion. By default, this is `name` attribute:
 class User < ActiveRecord::Base
   ac_field :full_name
 end
+```
+
+Don't forget to create elasticsearch index:
+
+```bash
+    $ rake environment tire:import CLASS='User'
 ```
 
 To find suggestions call `ac_search` method on your model. It return `Tire::Results::Collection` instance:
