@@ -20,7 +20,8 @@ module ElasticsearchAutocomplete
 
   def self.val_to_array(val, zero=false)
     return [] unless val
-    a = val.is_a?(Array) ? val : val.to_s.split(',').map(&:to_i)
+    return val if val.is_a?(Array)
+    a = val.to_s.split(',').map(&:to_i)
     zero ? a : a.reject(&:zero?)
   end
 end
