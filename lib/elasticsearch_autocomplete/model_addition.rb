@@ -43,7 +43,12 @@ module ElasticsearchAutocomplete
             end
           end
 
-          sort { by options[:order], options[:sort_mode] || 'asc' } if options[:order].present?
+          sort do
+            if options[:geo_order] && options[:with] && options[:with]['lat'].present? && options[:with]['lon'].present?
+              by '_geo_distance', {'lat_lon' => [options[:with].delete('lat'), options[:with].delete('lon')].join(','), 'order' => 'asc', 'unit' => 'km'}
+            end
+            by(options[:order], options[:sort_mode] || 'asc') if options[:order].present?
+          end
 
           filter(:and, :filters => options[:with].map { |k, v| {:terms => {k => ElasticsearchAutocomplete.val_to_array(v)}} }) if options[:with].present?
           if options[:without].present?
