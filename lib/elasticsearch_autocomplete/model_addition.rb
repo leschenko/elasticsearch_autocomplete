@@ -80,13 +80,13 @@ module ElasticsearchAutocomplete
         settings ElasticsearchAutocomplete::Analyzers::AC_BASE do
           mapping do
             ac_search_attrs.each do |attr|
-              indexes attr, model.index_config(attr, mode)
+              indexes attr, model.ac_index_config(attr, mode)
             end
           end
         end
       end
 
-      def index_config(attr, mode=:word)
+      def ac_index_config(attr, mode=:word)
         defaults = {:type => 'string', :search_analyzer => 'ac_search', :include_in_all => false}
         fields = case mode
                    when :word
