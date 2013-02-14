@@ -44,8 +44,10 @@ module ElasticsearchAutocomplete
           end
 
           sort do
-            if options[:geo_order] && options[:with] && options[:with]['lat'].present? && options[:with]['lon'].present?
-              by '_geo_distance', {'lat_lon' => [options[:with].delete('lat'), options[:with].delete('lon')].join(','), 'order' => 'asc', 'unit' => 'km'}
+            if options[:geo_order] && options[:with]
+              lat = options[:with].delete('lat').presence
+              lon = options[:with].delete('lon').presence
+              by('_geo_distance', {'lat_lon' => [lat, lon].join(','), 'order' => 'asc', 'unit' => 'km'}) if lat && lon
             end
             by(options[:order], options[:sort_mode] || 'asc') if options[:order].present?
           end
