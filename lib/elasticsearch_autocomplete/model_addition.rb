@@ -75,35 +75,39 @@ module ElasticsearchAutocomplete
         ElasticsearchAutocomplete::MODES[ac_opts[:mode]]
       end
 
-      private
-
       def define_ac_index(mode=:word)
-        mode_config = ac_mode_config
+        model = self
         settings ElasticsearchAutocomplete::Analyzers::AC_BASE do
           mapping do
             ac_search_attrs.each do |attr|
-              case mode
-                when :word
-                  indexes attr, :type => 'multi_field', :fields => {
-                      attr => {:type => 'string'},
-                      "#{mode_config[:base]}_#{attr}" => {:type => 'string', :index_analyzer => 'ac_edge_ngram', :search_analyzer => 'ac_search', :include_in_all => false},
-                      "#{mode_config[:word]}_#{attr}" => {:type => 'string', :index_analyzer => 'ac_edge_ngram_word', :search_analyzer => 'ac_search', :include_in_all => false}
-                  }
-                when :phrase
-                  indexes attr, :type => 'multi_field', :fields => {
-                      attr => {:type => 'string'},
-                      "#{mode_config[:base]}_#{attr}" => {:type => 'string', :index_analyzer => 'ac_edge_ngram', :search_analyzer => 'ac_search', :include_in_all => false},
-                  }
-                when :full
-                  indexes attr, :type => 'multi_field', :fields => {
-                      attr => {:type => 'string'},
-                      "#{mode_config[:base]}_#{attr}" => {:type => 'string', :index_analyzer => 'ac_edge_ngram', :search_analyzer => 'ac_search', :include_in_all => false, :boost => 3},
-                      "#{mode_config[:full]}_#{attr}" => {:type => 'string', :index_analyzer => 'ac_edge_ngram_full', :search_analyzer => 'ac_search', :include_in_all => false}
-                  }
-              end
+              indexes attr, model.index_config(attr, mode)
             end
           end
         end
+      end
+
+      def index_config(attr, mode=:word)
+        defaults = {:type => 'string', :search_analyzer => 'ac_search', :include_in_all => false}
+        fields = case mode
+                   when :word
+                     {
+                         attr => {:type => 'string'},
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram'),
+                         "#{ac_mode_config[:word]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram_word')
+                     }
+                   when :phrase
+                     {
+                         attr => {:type => 'string'},
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram')
+                     }
+                   when :full
+                     {
+                         attr => {:type => 'string'},
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram', :boost => 3),
+                         "#{ac_mode_config[:full]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram_full')
+                     }
+                 end
+        {:type => 'multi_field', :fields => fields}
       end
 
       def ac_search_fields
