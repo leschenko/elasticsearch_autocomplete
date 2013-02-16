@@ -74,10 +74,6 @@ module ElasticsearchAutocomplete
             end
       end
 
-      def for_input_token(r, attr='name_ru')
-        {:name => r[attr], :id => r.id}
-      end
-
       def ac_mode_config
         ElasticsearchAutocomplete::MODES[ac_opts[:mode]]
       end
