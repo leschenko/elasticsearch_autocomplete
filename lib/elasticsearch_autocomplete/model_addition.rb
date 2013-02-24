@@ -22,9 +22,15 @@ module ElasticsearchAutocomplete
 
         elasticsearch(options)
 
-        class_attribute :ac_opts, :ac_attr, :instance_writer => false
+        class_attribute :ac_opts, :ac_attr, :ac_search_attrs, :ac_search_fields, :ac_mode_config, :instance_writer => false
         self.ac_opts = options.reverse_merge(ElasticsearchAutocomplete.defaults)
         self.ac_attr = args.first || ElasticsearchAutocomplete.defaults[:attr]
+
+        self.ac_mode_config = ElasticsearchAutocomplete::MODES[ac_opts[:mode]]
+
+        self.ac_search_attrs = ac_opts[:search_fields] || (ac_opts[:localized] ? I18n.available_locales.map { |l| "#{ac_attr}_#{l}" } : [ac_attr])
+        self.ac_search_fields = ac_search_attrs.map { |attr| ac_mode_config.values.map { |prefix| "#{prefix}_#{attr}" } }.flatten
+
 
         define_ac_index(ac_opts[:mode]) unless options[:skip_settings]
       end
@@ -61,23 +67,6 @@ module ElasticsearchAutocomplete
         end
       end
 
-      def ac_search_attrs
-        @ac_search_attrs ||=
-            if ac_opts[:search_fields]
-              ac_opts[:search_fields]
-            else
-              if ac_opts[:localized]
-                I18n.available_locales.map { |l| "#{ac_attr}_#{l}" }
-              else
-                [ac_attr]
-              end
-            end
-      end
-
-      def ac_mode_config
-        ElasticsearchAutocomplete::MODES[ac_opts[:mode]]
-      end
-
       def define_ac_index(mode=:word)
         model = self
         settings ElasticsearchAutocomplete::Analyzers::AC_BASE do
@@ -111,10 +100,6 @@ module ElasticsearchAutocomplete
                      }
                  end
         {:type => 'multi_field', :fields => fields}
-      end
-
-      def ac_search_fields
-        @ac_search_fields ||= ac_search_attrs.map { |attr| ac_mode_config.values.map { |prefix| "#{prefix}_#{attr}" } }.flatten
       end
     end
 
