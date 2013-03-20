@@ -61,4 +61,10 @@ describe 'search filters' do
   it 'limit suggestions collection size' do
     model.ac_search('Laura', :per_page => 1).to_a.should have(1).result
   end
+
+  it 'paginate suggestions' do
+    res = model.ac_search('Laura', :per_page => 1, :page => 2).to_a
+    res.should have(1).result
+    res.first.full_name.should == 'Laura Flores'
+  end
 end

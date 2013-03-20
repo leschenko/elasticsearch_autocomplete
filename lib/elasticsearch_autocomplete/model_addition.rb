@@ -40,7 +40,7 @@ module ElasticsearchAutocomplete
       def ac_search(query, options={})
         options.reverse_merge!({:per_page => 50, :search_fields => ac_search_fields})
 
-        tire.search :per_page => options[:per_page] do
+        tire.search :per_page => options[:per_page], :page => options[:page] do
           query do
             if query.size.zero?
               all
