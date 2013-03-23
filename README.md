@@ -2,6 +2,10 @@
 
 Simple autocomplete for rails models using awesome [Elasticsearch](http://www.elasticsearch.org/) and [tire](https://github.com/karmi/tire) gem
 
+## Example app
+
+Look at ElasticsearchAutocomplete [example app](https://github.com/leschenko/example_elasticsearch_autocomplete)
+
 ## Installation
 
 Add this line to your application's Gemfile:
