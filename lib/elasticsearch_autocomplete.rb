@@ -1,3 +1,4 @@
+require 'tire'
 require 'elasticsearch_autocomplete/version'
 require 'elasticsearch_autocomplete/analyzers'
 require 'elasticsearch_autocomplete/model_addition'
