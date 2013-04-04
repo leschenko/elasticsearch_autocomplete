@@ -2,6 +2,28 @@ require 'spec_helper'
 
 class ActiveModelUser < StubModelBase
   ac_field :full_name
+
+  def self.test_data
+    ['Test User', 'Test User2']
+  end
+
+  def self.populate
+    test_data.each_with_index do |name, id|
+      u = new(:full_name => name)
+      u.id = id
+      u.save
+    end
+  end
+
+  # Stub for find, which takes in array of ids.
+  def self.find(ids)
+    ids.map do |id|
+      id = id.to_i
+      u = new(:full_name => test_data[id])
+      u.id = id
+      u
+    end
+  end
 end
 
 describe ElasticsearchAutocomplete do
@@ -28,6 +50,20 @@ describe ElasticsearchAutocomplete do
     it 'allow to change default settings' do
       ElasticsearchAutocomplete.defaults = {:attr => :test, :localized => true, :mode => :phrase, :index_prefix => 'test'}
       ElasticsearchAutocomplete.defaults.should == {:attr => :test, :localized => true, :mode => :phrase, :index_prefix => 'test'}
+    end
+  end
+
+  describe 'eager loading' do
+    it 'does not eager load the records from ac_search by default' do
+      results = ActiveModelUser.ac_search('Test User')
+      results.to_a.should_not be_empty
+      results.map{|x| x.is_a?(ActiveModelUser).should == false }
+    end
+
+    it 'eager loads the records from ac_search' do
+      results = ActiveModelUser.ac_search('Test User', :load => true)
+      results.to_a.should_not be_empty
+      results.map{|x| x.is_a?(ActiveModelUser).should == true }
     end
   end
 end
