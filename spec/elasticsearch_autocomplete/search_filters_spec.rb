@@ -30,40 +30,39 @@ class ActiveModelUserFilter < StubModelBase
 end
 
 describe 'search filters' do
-  let(:model) { ActiveModelUserFilter }
-
   before :all do
-    model.setup_index
+    @model = ActiveModelUserFilter
+    @model.setup_index
   end
 
   it 'filter suggestions with terms' do
-    model.ac_search('Laura', :with => {:interest_ids => [2]}).map(&:full_name).should =~ ['Laura Nelson', 'Laura Flores']
+    @model.ac_search('Laura', :with => {:interest_ids => [2]}).map(&:full_name).should =~ ['Laura Nelson', 'Laura Flores']
   end
 
   it 'accept coma separated string for filter' do
-    model.ac_search('Laura', :with => {:interest_ids => '1,4'}).map(&:full_name).should =~ ['Laura Nelson', 'Laura Larson']
+    @model.ac_search('Laura', :with => {:interest_ids => '1,4'}).map(&:full_name).should =~ ['Laura Nelson', 'Laura Larson']
   end
 
   it 'filter suggestions without terms' do
-    model.ac_search('Laura', :without => {:interest_ids => [2]}).map(&:full_name).should =~ ['Laura Larson']
+    @model.ac_search('Laura', :without => {:interest_ids => [2]}).map(&:full_name).should =~ ['Laura Larson']
   end
 
   it 'can order suggestions desc' do
-    res = model.ac_search('Laura', :order => :id, :sort_mode => 'desc').map(&:id)
+    res = @model.ac_search('Laura', :order => :id, :sort_mode => 'desc').map(&:id)
     res.should == res.sort.reverse
   end
 
   it 'can order suggestions asc' do
-    res = model.ac_search('Laura', :order => :id, :sort_mode => 'asc').map(&:id)
+    res = @model.ac_search('Laura', :order => :id, :sort_mode => 'asc').map(&:id)
     res.should == res.sort
   end
 
   it 'limit suggestions collection size' do
-    model.ac_search('Laura', :per_page => 1).to_a.should have(1).result
+    @model.ac_search('Laura', :per_page => 1).to_a.should have(1).result
   end
 
   it 'paginate suggestions' do
-    res = model.ac_search('Laura', :per_page => 1, :page => 2).to_a
+    res = @model.ac_search('Laura', :per_page => 1, :page => 2).to_a
     res.should have(1).result
     res.first.full_name.should == 'Laura Flores'
   end

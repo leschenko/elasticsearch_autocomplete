@@ -20,15 +20,14 @@ class ActiveModelProductLocalized < StubModelBase
 end
 
 describe 'suggestions for localized attributes' do
-  let(:model) { ActiveModelProductLocalized }
-
   before :all do
-    model.setup_index
+    @model = ActiveModelProductLocalized
+    @model.setup_index
   end
 
   it 'don\'t suggest from all locales' do
-    model.ac_search('name_en first').to_a.should have(1).results
-    model.ac_search('name_ru first').to_a.should have(1).results
-    model.ac_search('name_ru').to_a.should have(2).results
+    @model.ac_search('name_en first').to_a.should have(1).results
+    @model.ac_search('name_ru first').to_a.should have(1).results
+    @model.ac_search('name_ru').to_a.should have(2).results
   end
 end
