@@ -2,13 +2,13 @@ require 'tire'
 require 'elasticsearch_autocomplete/version'
 require 'elasticsearch_autocomplete/analyzers'
 require 'elasticsearch_autocomplete/model_addition'
-require 'elasticsearch_autocomplete/railtie' if defined? Rails
+require 'elasticsearch_autocomplete/railtie' if Object.const_defined?(:Rails)
 
 module ElasticsearchAutocomplete
   mattr_accessor :defaults
 
   def self.default_index_prefix
-    Object.const_defined?('Rails') ? ::Rails.application.class.name.split('::').first.downcase : nil
+    Object.const_defined?(:Rails) ? ::Rails.application.class.name.split('::').first.downcase : nil
   end
 
   self.defaults = {:attr => :name, :localized => false, :mode => :word, :index_prefix => default_index_prefix}
