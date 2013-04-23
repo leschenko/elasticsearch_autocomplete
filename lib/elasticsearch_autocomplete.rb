@@ -8,7 +8,7 @@ module ElasticsearchAutocomplete
   mattr_accessor :defaults
 
   def self.default_index_prefix
-    Rails.application.class.name.split('::').first.downcase if Object.const_defined?('Rails')
+    Object.const_defined?('Rails') ? ::Rails.application.class.name.split('::').first.downcase : nil
   end
 
   self.defaults = {:attr => :name, :localized => false, :mode => :word, :index_prefix => default_index_prefix}
