@@ -19,9 +19,11 @@ module ElasticsearchAutocomplete
       :full => {:base => 'ac', :full => 'ac_full'}
   }
 
-  def self.val_to_array(val, zero=false)
+  def self.val_to_terms(val, zero=false)
     return [] unless val
     return val if val.is_a?(Array)
+    return [true] if val == 'true'
+    return [false] if val == 'false'
     a = val.to_s.split(',').map(&:to_i)
     zero ? a : a.reject(&:zero?)
   end

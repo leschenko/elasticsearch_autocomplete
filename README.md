@@ -63,7 +63,7 @@ class Product < ActiveRecord::Base
 end
 ```
 
-If you wand to define settings and mapping for elasticsearch index yourselves:
+If you want to define settings and mapping for elasticsearch index yourselves:
 
 ```ruby
 class Product < ActiveRecord::Base

@@ -66,6 +66,40 @@ describe ElasticsearchAutocomplete do
       results.map{|x| x.is_a?(ActiveModelUser).should == true }
     end
   end
+
+  describe '#val_to_terms' do
+    it 'empty array if argument is blank' do
+      ElasticsearchAutocomplete.val_to_terms(nil).should == []
+    end
+
+    it 'array if argument is array' do
+      ElasticsearchAutocomplete.val_to_terms([1, 2]).should == [1, 2]
+    end
+
+    it 'comma separated values' do
+      ElasticsearchAutocomplete.val_to_terms('1,2').should == [1, 2]
+    end
+
+    context 'skip zero' do
+      it 'skip zero by default' do
+        ElasticsearchAutocomplete.val_to_terms('0,1,2').should == [1, 2]
+      end
+
+      it 'include zero' do
+        ElasticsearchAutocomplete.val_to_terms('0,1,2', true).should == [0, 1, 2]
+      end
+    end
+
+    context 'boolean' do
+      it 'true value' do
+        ElasticsearchAutocomplete.val_to_terms('true').should == [true]
+      end
+
+      it 'false value' do
+        ElasticsearchAutocomplete.val_to_terms('false').should == [false]
+      end
+    end
+  end
 end
 
 shared_examples 'basic autocomplete' do |model|

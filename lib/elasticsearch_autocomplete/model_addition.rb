@@ -58,10 +58,10 @@ module ElasticsearchAutocomplete
             by(options[:order], options[:sort_mode] || 'asc') if options[:order].present?
           end
 
-          filter(:and, :filters => options[:with].map { |k, v| {:terms => {k => ElasticsearchAutocomplete.val_to_array(v)}} }) if options[:with].present?
+          filter(:and, :filters => options[:with].map { |k, v| {:terms => {k => ElasticsearchAutocomplete.val_to_terms(v)}} }) if options[:with].present?
           if options[:without].present?
             options[:without].each do |k, v|
-              filter(:not, {:terms => {k => ElasticsearchAutocomplete.val_to_array(v, true)}})
+              filter(:not, {:terms => {k => ElasticsearchAutocomplete.val_to_terms(v, true)}})
             end
           end
         end
