@@ -38,14 +38,11 @@ class ActiveModelBase
   end
 
   def save
-    _run_save_callbacks do
-    end
+    run_callbacks(:save) {}
   end
 
   def destroy
-    _run_destroy_callbacks do
-      @destroyed = true
-    end
+    run_callbacks(:destroy) { @destroyed = true }
   end
 
   def destroyed?
