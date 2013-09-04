@@ -6,6 +6,8 @@ require 'elasticsearch_autocomplete/railtie' if Object.const_defined?(:Rails)
 
 module ElasticsearchAutocomplete
   mattr_accessor :defaults
+  mattr_accessor :enable_indexing
+  self.enable_indexing = true
 
   def self.default_index_prefix
     Object.const_defined?(:Rails) ? ::Rails.application.class.name.split('::').first.downcase : nil
@@ -19,12 +21,24 @@ module ElasticsearchAutocomplete
       :full => {:base => 'ac', :full => 'ac_full'}
   }
 
-  def self.val_to_terms(val, zero=false)
-    return [] unless val
-    return val if val.is_a?(Array)
-    return [true] if val == 'true'
-    return [false] if val == 'false'
-    a = val.to_s.split(',').map(&:to_i)
-    zero ? a : a.reject(&:zero?)
+  class << self
+    def val_to_terms(val, zero=false)
+      return [] unless val
+      return val if val.is_a?(Array)
+      return [true] if val == 'true'
+      return [false] if val == 'false'
+      a = val.to_s.split(',').map(&:to_i)
+      zero ? a : a.reject(&:zero?)
+    end
+
+    def without_indexing
+      original_setting = enable_indexing
+      self.enable_indexing = false
+      begin
+        yield
+      ensure
+        self.enable_indexing = original_setting
+      end
+    end
   end
 end

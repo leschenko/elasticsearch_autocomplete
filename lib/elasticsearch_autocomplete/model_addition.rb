@@ -8,9 +8,9 @@ module ElasticsearchAutocomplete
       def elasticsearch(options={})
         include Tire::Model::Search
         unless options.delete(:skip_after_save)
-          after_save lambda { tire.update_index }
+          after_save :ac_update_index
         end
-        after_destroy lambda { tire.update_index }
+        after_destroy :ac_update_index
         index_prefix ElasticsearchAutocomplete.defaults[:index_prefix] if ElasticsearchAutocomplete.defaults[:index_prefix]
       end
 
@@ -111,6 +111,11 @@ module ElasticsearchAutocomplete
           for_json[attr] = send(attr)
         end
         MultiJson.encode(for_json)
+      end
+
+      def ac_update_index
+        return true unless ElasticsearchAutocomplete.enable_indexing
+        tire.update_index
       end
     end
   end

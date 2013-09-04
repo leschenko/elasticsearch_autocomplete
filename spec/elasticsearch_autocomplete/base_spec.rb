@@ -36,6 +36,10 @@ describe ElasticsearchAutocomplete do
     should respond_to(:ac_search)
   end
 
+  it 'indexing enabled by default' do
+    ElasticsearchAutocomplete.enable_indexing.should be_true
+  end
+
   it 'define to_indexed_json method' do
     ActiveModelUser.new(:full_name => 'test').to_indexed_json.should == '{"id":null,"created_at":null,"full_name":"test"}'
   end
@@ -98,6 +102,20 @@ describe ElasticsearchAutocomplete do
       it 'false value' do
         ElasticsearchAutocomplete.val_to_terms('false').should == [false]
       end
+    end
+  end
+
+  describe 'indexing' do
+    it 'enabled by default' do
+      record = ActiveModelUser.new(:full_name => 'test')
+      record.should_receive(:tire).and_return(double('tire').as_null_object)
+      record.save
+    end
+
+    it 'disabled' do
+      record = ActiveModelUser.new(:full_name => 'test')
+      record.should_not_receive(:tire)
+      ElasticsearchAutocomplete.without_indexing { record.save }
     end
   end
 end
