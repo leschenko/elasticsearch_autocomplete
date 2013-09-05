@@ -5,8 +5,10 @@ module ElasticsearchAutocomplete
     end
 
     module SingletonMethods
-      def elasticsearch(options={})
+      def ac_setup_tire
+        include InstanceMethods
         include Tire::Model::Search
+
         unless options.delete(:skip_after_save)
           after_save :ac_update_index
         end
@@ -14,15 +16,13 @@ module ElasticsearchAutocomplete
         index_prefix ElasticsearchAutocomplete.defaults[:index_prefix] if ElasticsearchAutocomplete.defaults[:index_prefix]
       end
 
-      def ac_field(*args, &block)
-        options = args.extract_options!
-
-        include InstanceMethods
+      def ac_field(*args)
         extend ClassMethods
 
-        elasticsearch(options)
+        ac_setup_tire
 
         class_attribute :ac_opts, :ac_attr, :ac_search_attrs, :ac_search_fields, :ac_mode_config, :instance_writer => false
+        options = args.extract_options!
         self.ac_opts = options.reverse_merge(ElasticsearchAutocomplete.defaults)
         self.ac_attr = args.first || ElasticsearchAutocomplete.defaults[:attr]
 
@@ -30,7 +30,6 @@ module ElasticsearchAutocomplete
 
         self.ac_search_attrs = ac_opts[:search_fields] || (ac_opts[:localized] ? I18n.available_locales.map { |l| "#{ac_attr}_#{l}" } : [ac_attr])
         self.ac_search_fields = ac_search_attrs.map { |attr| ac_mode_config.values.map { |prefix| "#{prefix}_#{attr}" } }.flatten
-
 
         define_ac_index(ac_opts[:mode]) unless options[:skip_settings]
       end
