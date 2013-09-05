@@ -9,10 +9,9 @@ module ElasticsearchAutocomplete
         include InstanceMethods
         include Tire::Model::Search
 
-        unless options.delete(:skip_after_save)
-          after_save :ac_update_index
-        end
+        after_save :ac_update_index
         after_destroy :ac_update_index
+        
         index_prefix ElasticsearchAutocomplete.defaults[:index_prefix] if ElasticsearchAutocomplete.defaults[:index_prefix]
       end
 
