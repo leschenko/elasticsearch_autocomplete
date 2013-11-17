@@ -3,8 +3,8 @@
 Simple autocomplete for rails models using awesome [Elasticsearch](http://www.elasticsearch.org/) and [tire](https://github.com/karmi/tire) gem
 
 [![Build Status](https://travis-ci.org/leschenko/elasticsearch_autocomplete.png?branch=master)](https://travis-ci.org/leschenko/elasticsearch_autocomplete)
-
 [![Dependency Status](https://gemnasium.com/leschenko/elasticsearch_autocomplete.png)](https://gemnasium.com/leschenko/elasticsearch_autocomplete)
+
 ## Example app
 
 Look at ElasticsearchAutocomplete [example app](https://github.com/leschenko/example_elasticsearch_autocomplete)
