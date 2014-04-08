@@ -11,5 +11,6 @@ env:
 
 rvm:
   - 1.9.3
-  - jruby-19mode
+  - jruby-21mode
   - 2.0.0
+  - 2.1.1  
