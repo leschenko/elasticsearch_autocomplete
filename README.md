@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/leschenko/elasticsearch_autocomplete.png?branch=master)](https://travis-ci.org/leschenko/elasticsearch_autocomplete)
 [![Dependency Status](https://gemnasium.com/leschenko/elasticsearch_autocomplete.png)](https://gemnasium.com/leschenko/elasticsearch_autocomplete)
 
-Simple autocomplete for rails models using awesome [Elasticsearch](http://www.elasticsearch.org/) and [tire](https://github.com/karmi/tire) gem
+Simple autocomplete for rails models using awesome [Elasticsearch](http://www.elasticsearch.org/).
 
 ## Example app
 
