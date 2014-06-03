@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 class ActiveModelProductLocalized < StubModelBase
-  ac_field :name, :localized => true
+  ac_field :name, localized: true
 
   def self.test_data
     [
-        {:name_ru => 'name_ru first', :name_en => 'name_en first'},
-        {:name_ru => 'name_ru second', :name_en => 'name_en second'}
+        {name_ru: 'name_ru first', name_en: 'name_en first'},
+        {name_ru: 'name_ru second', name_en: 'name_en second'}
     ]
   end
 

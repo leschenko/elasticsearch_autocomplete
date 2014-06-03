@@ -9,7 +9,7 @@ class ActiveModelUser < StubModelBase
 
   def self.populate
     test_data.each_with_index do |name, id|
-      u = new(:full_name => name)
+      u = new(full_name: name)
       u.id = id
       u.save
     end
@@ -19,7 +19,7 @@ class ActiveModelUser < StubModelBase
   def self.find(ids)
     ids.map do |id|
       id = id.to_i
-      u = new(:full_name => test_data[id])
+      u = new(full_name: test_data[id])
       u.id = id
       u
     end
@@ -41,7 +41,7 @@ describe ElasticsearchAutocomplete do
   end
 
   it 'define to_indexed_json method' do
-    ActiveModelUser.new(:full_name => 'test').to_indexed_json.should == '{"id":null,"created_at":null,"full_name":"test"}'
+    ActiveModelUser.new(full_name: 'test').to_indexed_json.should == '{"id":null,"created_at":null,"full_name":"test"}'
   end
 
   describe 'default settings' do
@@ -52,8 +52,8 @@ describe ElasticsearchAutocomplete do
     end
 
     it 'allow to change default settings' do
-      ElasticsearchAutocomplete.defaults = {:attr => :test, :localized => true, :mode => :phrase, :index_prefix => 'test'}
-      ElasticsearchAutocomplete.defaults.should == {:attr => :test, :localized => true, :mode => :phrase, :index_prefix => 'test'}
+      ElasticsearchAutocomplete.defaults = {attr: :test, localized: true, mode: :phrase, index_prefix: 'test'}
+      ElasticsearchAutocomplete.defaults.should == {attr: :test, localized: true, mode: :phrase, index_prefix: 'test'}
     end
   end
 
@@ -101,13 +101,13 @@ describe ElasticsearchAutocomplete do
 
   describe 'indexing' do
     it 'enabled by default' do
-      record = ActiveModelUser.new(:full_name => 'test')
+      record = ActiveModelUser.new(full_name: 'test')
       record.should_receive(:__elasticsearch__).and_return(double('__elasticsearch__').as_null_object)
       record.save
     end
 
     it 'disabled' do
-      record = ActiveModelUser.new(:full_name => 'test')
+      record = ActiveModelUser.new(full_name: 'test')
       record.should_not_receive(:__elasticsearch__)
       ElasticsearchAutocomplete.without_indexing { record.save }
     end
