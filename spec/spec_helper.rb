@@ -3,8 +3,6 @@ require 'elasticsearch/model'
 require 'active_support/core_ext'
 require 'elasticsearch_autocomplete'
 
-require 'debugger'
-
 Elasticsearch::Model.client = Elasticsearch::Client.new host: 'http://localhost:9201', log: ENV['ES_LOGGER'], trace: ENV['ES_LOGGER']
 ElasticsearchAutocomplete.defaults[:commit_callbacks] = false
 

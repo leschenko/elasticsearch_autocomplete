@@ -37,7 +37,7 @@ describe ElasticsearchAutocomplete do
   end
 
   it 'indexing enabled by default' do
-    ElasticsearchAutocomplete.enable_indexing.should be_true
+    ElasticsearchAutocomplete.enable_indexing.should be_truthy
   end
 
   it 'define to_indexed_json method' do
@@ -62,12 +62,6 @@ describe ElasticsearchAutocomplete do
       results = ActiveModelUser.ac_search('Test User')
       results.to_a.should_not be_empty
       results.map{|x| x.is_a?(ActiveModelUser).should == false }
-    end
-
-    it 'eager loads the records from ac_search' do
-      results = ActiveModelUser.ac_search('Test User', :load => true)
-      results.to_a.should_not be_empty
-      results.map{|x| x.is_a?(ActiveModelUser).should == true }
     end
   end
 
@@ -108,13 +102,13 @@ describe ElasticsearchAutocomplete do
   describe 'indexing' do
     it 'enabled by default' do
       record = ActiveModelUser.new(:full_name => 'test')
-      record.should_receive(:tire).and_return(double('tire').as_null_object)
+      record.should_receive(:__elasticsearch__).and_return(double('__elasticsearch__').as_null_object)
       record.save
     end
 
     it 'disabled' do
       record = ActiveModelUser.new(:full_name => 'test')
-      record.should_not_receive(:tire)
+      record.should_not_receive(:__elasticsearch__)
       ElasticsearchAutocomplete.without_indexing { record.save }
     end
   end

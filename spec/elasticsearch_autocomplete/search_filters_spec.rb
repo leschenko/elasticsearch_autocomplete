@@ -3,6 +3,10 @@ require 'spec_helper'
 class ActiveModelUserFilter < StubModelBase
   ac_field :full_name
 
+  mapping do
+    indexes :id, type: 'integer'
+  end
+
   def self.test_data
     [
         {:full_name => 'Laura Nelson', :interest_ids => [1, 2]},
@@ -47,8 +51,8 @@ describe 'search filters' do
     @model.ac_search('Laura', :without => {:interest_ids => [2]}).map(&:full_name).should =~ ['Laura Larson']
   end
 
-  it 'can order suggestions desc' do
-    res = @model.ac_search('Laura', :order => :id, :sort_mode => 'desc').map(&:id)
+  it 'can order suggestions desc', focus: true do
+    res = @model.ac_search('Laura', :order => :_uid, :sort_mode => 'desc').map(&:id)
     res.should == res.sort.reverse
   end
 
@@ -58,12 +62,12 @@ describe 'search filters' do
   end
 
   it 'limit suggestions collection size' do
-    @model.ac_search('Laura', :per_page => 1).to_a.should have(1).result
+    @model.ac_search('Laura', :per_page => 1).to_a.length.should == 1
   end
 
   it 'paginate suggestions' do
     res = @model.ac_search('Laura', :per_page => 1, :page => 2).to_a
-    res.should have(1).result
+    res.length.should == 1
     res.first.full_name.should == 'Laura Flores'
   end
 end
