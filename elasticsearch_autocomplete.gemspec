@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ['Alex Leschenko']
   gem.email         = %w(leschenko.al@gmail.com)
   gem.summary       = %q{Elasticsearch autocomplete for models}
-  gem.description   = %q{Simple autocomplete for your models using awesome elasticsearch and tire gem}
+  gem.description   = %q{Simple autocomplete for your models using elasticsearch}
   gem.homepage      = 'https://github.com/leschenko/elasticsearch_autocomplete'
 
   gem.files         = `git ls-files`.split($/)
@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = %w(lib)
 
-  gem.add_dependency 'tire', '~> 0.6.0'
+  gem.add_dependency 'elasticsearch-model', '~> 0.1.3'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
