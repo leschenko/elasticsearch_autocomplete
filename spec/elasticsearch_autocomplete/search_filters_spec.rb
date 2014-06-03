@@ -9,9 +9,9 @@ class ActiveModelUserFilter < StubModelBase
 
   def self.test_data
     [
-        {:full_name => 'Laura Nelson', :interest_ids => [1, 2]},
-        {:full_name => 'Laura Flores', :interest_ids => [2, 3]},
-        {:full_name => 'Laura Larson', :interest_ids => [3, 4]}
+        {:full_name => 'Laura Nelson', :interest_ids => [1, 2], int: 3},
+        {:full_name => 'Laura Flores', :interest_ids => [2, 3], int: 5},
+        {:full_name => 'Laura Larson', :interest_ids => [3, 4], int: 4}
     ]
   end
 
@@ -52,7 +52,7 @@ describe 'search filters' do
   end
 
   it 'can order suggestions desc', focus: true do
-    res = @model.ac_search('Laura', :order => :_uid, :sort_mode => 'desc').map(&:id)
+    res = @model.ac_search('Laura', :order => :int, :sort_mode => 'desc').map(&:int)
     res.should == res.sort.reverse
   end
 
