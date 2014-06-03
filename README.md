@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/leschenko/elasticsearch_autocomplete.png?branch=master)](https://travis-ci.org/leschenko/elasticsearch_autocomplete)
 [![Dependency Status](https://gemnasium.com/leschenko/elasticsearch_autocomplete.png)](https://gemnasium.com/leschenko/elasticsearch_autocomplete)
 
-Simple autocomplete for rails models using awesome [Elasticsearch](http://www.elasticsearch.org/) and [tire](https://github.com/karmi/tire) gem
+Simple autocomplete for rails models using [Elasticsearch](http://www.elasticsearch.org/) and [elasticsearch-ruby](https://github.com/elasticsearch/elasticsearch-ruby)
 
 ## Example app
 
@@ -36,7 +36,7 @@ end
 Don't forget to rebuild elasticsearch index:
 
 ```bash
-    $ rake environment tire:import CLASS='User' FORCE=true
+    $ rake environment elasticsearch:import:model CLASS='User' FORCE=true
 ```
 
 To find suggestions call `ac_search` method on your model. It return `Tire::Results::Collection` instance:
