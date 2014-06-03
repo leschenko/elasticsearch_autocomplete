@@ -1,15 +1,23 @@
 require 'active_model'
-require 'tire'
+require 'elasticsearch/model'
 require 'active_support/core_ext'
 require 'elasticsearch_autocomplete'
 
-Tire.configure do
-  #logger 'tmp/elasticsearch.log'  # Commented out logger line here so that it doesn't break specs when tmp directory doesn't exist.
-  url 'http://localhost:9200'
-  pretty 1
-end
+require 'debugger'
+
+Elasticsearch::Model.client = Elasticsearch::Client.new host: 'http://localhost:9201', log: ENV['ES_LOGGER'], trace: ENV['ES_LOGGER']
+ElasticsearchAutocomplete.defaults[:commit_callbacks] = false
 
 I18n.available_locales = [:en, :ru]
+
+RSpec.configure do |config|
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+  config.mock_with :rspec do |mocks|
+    mocks.syntax = [:expect, :should]
+  end
+end
 
 class ActiveModelBase
   include ActiveModel::AttributeMethods
@@ -18,7 +26,7 @@ class ActiveModelBase
   include ActiveModel::Naming
 
   extend ActiveModel::Callbacks
-  define_model_callbacks :save, :destroy
+  define_model_callbacks :create, :update, :destroy
 
   include ElasticsearchAutocomplete::ModelAddition
 
@@ -38,7 +46,7 @@ class ActiveModelBase
   end
 
   def save
-    run_callbacks(:save) {}
+    run_callbacks(:create) {}
   end
 
   def destroy
@@ -50,15 +58,13 @@ class ActiveModelBase
   end
 
   def self.setup_index
-    tire.index.delete
-    tire.create_elasticsearch_index
+    __elasticsearch__.create_index! force: true, index: index_name
     populate
-    tire.index.refresh
+    __elasticsearch__.refresh_index!
   end
 end
 
 class StubModelBase < ActiveModelBase
-
   def self.test_data
     ['Joyce Flores', 'Rebecca Nelson', 'Larson Laura', 'Laura Larson']
   end
