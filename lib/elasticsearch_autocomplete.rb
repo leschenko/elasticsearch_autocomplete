@@ -1,4 +1,4 @@
-require 'tire'
+require 'elasticsearch'
 require 'elasticsearch_autocomplete/version'
 require 'elasticsearch_autocomplete/analyzers'
 require 'elasticsearch_autocomplete/model_addition'
@@ -13,7 +13,7 @@ module ElasticsearchAutocomplete
     Object.const_defined?(:Rails) ? ::Rails.application.class.name.split('::').first.downcase : nil
   end
 
-  self.defaults = {:attr => :name, :localized => false, :mode => :word, :index_prefix => default_index_prefix}
+  self.defaults = {:attr => :name, localized: false, :mode => :word, index_prefix: default_index_prefix, commit_callbacks: true}
 
   MODES = {
       :word => {:base => 'ac', :word => 'ac_word'},
