@@ -55,13 +55,23 @@ describe ElasticsearchAutocomplete do
       ElasticsearchAutocomplete.defaults = {attr: :test, localized: true, mode: :phrase, index_prefix: 'test'}
       ElasticsearchAutocomplete.defaults.should == {attr: :test, localized: true, mode: :phrase, index_prefix: 'test'}
     end
-  end
 
-  describe 'eager loading' do
-    it 'does not eager load the records from ac_search by default' do
-      results = ActiveModelUser.ac_search('Test User')
-      results.to_a.should_not be_empty
-      results.map{|x| x.is_a?(ActiveModelUser).should == false }
+    describe 'index prefix' do
+      before do
+        ElasticsearchAutocomplete.defaults[:index_prefix] = 'my_prefix'
+        @klass = Class.new(ActiveModelBase)
+        Object.const_set("Rspec#{rand(9999)}", @klass)
+        @klass.ac_setup_es
+      end
+
+      it 'set index prefix' do
+        @klass.index_name.should start_with('my_prefix_rspec')
+      end
+
+      it 'keep index prefix once' do
+        @klass.ac_setup_es
+        @klass.index_name.should start_with('my_prefix_rspec')
+      end
     end
   end
 

@@ -20,7 +20,10 @@ module ElasticsearchAutocomplete
           after_destroy -> { ac_store_document(:delete) }
         end
 
-        index_prefix ElasticsearchAutocomplete.defaults[:index_prefix] if ElasticsearchAutocomplete.defaults[:index_prefix]
+        # no index_prefix anymore https://github.com/elasticsearch/elasticsearch-rails/issues/2
+        if ElasticsearchAutocomplete.defaults[:index_prefix] && !index_name.start_with?(ElasticsearchAutocomplete.defaults[:index_prefix])
+          index_name "#{ElasticsearchAutocomplete.defaults[:index_prefix]}_#{index_name}"
+        end
       end
 
       def ac_field(*args)
@@ -115,6 +118,7 @@ module ElasticsearchAutocomplete
                  end
         {type: 'multi_field', fields: fields}
       end
+
     end
 
     module InstanceMethods
