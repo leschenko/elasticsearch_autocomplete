@@ -47,7 +47,7 @@ module ElasticsearchAutocomplete
 
     module ClassMethods
       def ac_search(query, options={})
-        options.reverse_merge!({per_page: 50, search_fields: ac_search_fields, load: false})
+        options.reverse_merge!({per_page: 50, search_fields: ac_search_fields})
 
         if query.size.zero?
           query = {match_all: {}}
@@ -122,12 +122,9 @@ module ElasticsearchAutocomplete
     end
 
     module InstanceMethods
-      def as_indexed_json(options={})
-        for_json = {}
+      def as_indexed_json(*)
         attrs = [:id, :created_at] + self.class.ac_search_attrs
-        attrs.each do |attr|
-          for_json[attr] = send(attr)
-        end
+        attrs.each_with_object({}) { |attr, json| json[attr] = send(attr) }
       end
 
       def ac_store_document(action)
