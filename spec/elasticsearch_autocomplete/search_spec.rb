@@ -4,7 +4,7 @@ class ActiveModelUserFilter < StubModelBase
   ac_field :full_name
 
   mapping do
-    indexes :id, type: 'integer'
+    indexes :int, type: 'integer'
   end
 
   def self.test_data
@@ -23,14 +23,11 @@ class ActiveModelUserFilter < StubModelBase
     end
   end
 
-  def to_indexed_json
-    for_json = {}
-    attrs = [:id, :created_at, :interest_ids] + self.class.ac_search_attrs
-    attrs.each do |attr|
-      for_json[attr] = send(attr)
-    end
-    MultiJson.encode(for_json)
+  def as_indexed_json(*)
+    attrs = [:id, :int, :created_at] + self.class.ac_search_attrs
+    attrs.each_with_object({}) { |attr, json| json[attr] = send(attr) }
   end
+
 end
 
 describe 'search' do

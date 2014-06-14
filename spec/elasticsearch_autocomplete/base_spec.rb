@@ -41,7 +41,7 @@ describe ElasticsearchAutocomplete do
   end
 
   it 'define to_indexed_json method' do
-    ActiveModelUser.new(full_name: 'test').to_indexed_json.should == '{"id":null,"created_at":null,"full_name":"test"}'
+    ActiveModelUser.new(full_name: 'test').as_indexed_json.should == {id: nil, created_at: nil, full_name: 'test'}
   end
 
   describe 'default settings' do
