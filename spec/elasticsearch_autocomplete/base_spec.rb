@@ -40,7 +40,7 @@ describe ElasticsearchAutocomplete do
     ElasticsearchAutocomplete.enable_indexing.should be_truthy
   end
 
-  it 'define to_indexed_json method' do
+  it 'define as_indexed_json method' do
     ActiveModelUser.new(full_name: 'test').as_indexed_json.should == {id: nil, created_at: nil, full_name: 'test'}
   end
 

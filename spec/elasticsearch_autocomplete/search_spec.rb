@@ -24,7 +24,7 @@ class ActiveModelUserFilter < StubModelBase
   end
 
   def as_indexed_json(*)
-    attrs = [:id, :int, :created_at] + self.class.ac_search_attrs
+    attrs = [:id, :int, :interest_ids, :created_at] + self.class.ac_search_attrs
     attrs.each_with_object({}) { |attr, json| json[attr] = send(attr) }
   end
 
