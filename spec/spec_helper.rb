@@ -3,7 +3,7 @@ require 'elasticsearch/model'
 require 'active_support/core_ext'
 require 'elasticsearch_autocomplete'
 
-Elasticsearch::Model.client = Elasticsearch::Client.new host: "http://localhost:#{ENV['ES_PORT'] || 9200}", log: ENV['ES_LOGGER'], trace: ENV['ES_LOGGER']
+Elasticsearch::Model.client = Elasticsearch::Client.new host: "http://localhost:#{ENV['ES_PORT'] || 9200}", log: ENV['DEBUG'], trace: ENV['DEBUG']
 ElasticsearchAutocomplete.defaults[:commit_callbacks] = false
 
 I18n.available_locales = [:en, :ru]
