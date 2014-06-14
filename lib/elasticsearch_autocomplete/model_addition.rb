@@ -122,13 +122,12 @@ module ElasticsearchAutocomplete
     end
 
     module InstanceMethods
-      def to_indexed_json
+      def as_indexed_json(options={})
         for_json = {}
         attrs = [:id, :created_at] + self.class.ac_search_attrs
         attrs.each do |attr|
           for_json[attr] = send(attr)
         end
-        MultiJson.encode(for_json)
       end
 
       def ac_store_document(action)
