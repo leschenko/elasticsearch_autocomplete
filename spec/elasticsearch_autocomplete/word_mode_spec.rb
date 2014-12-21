@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class ActiveModelUserWord < StubModelBase
-  ac_field :full_name, :mode => :word
+  ac_field :full_name, mode: :word
 end
 
 describe ':word mode autocomplete' do

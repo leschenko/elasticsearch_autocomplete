@@ -9,7 +9,7 @@ class ActiveModelUser < StubModelBase
 
   def self.populate
     test_data.each_with_index do |name, id|
-      u = new(:full_name => name)
+      u = new(full_name: name)
       u.id = id
       u.save
     end
@@ -19,7 +19,7 @@ class ActiveModelUser < StubModelBase
   def self.find(ids)
     ids.map do |id|
       id = id.to_i
-      u = new(:full_name => test_data[id])
+      u = new(full_name: test_data[id])
       u.id = id
       u
     end
@@ -41,7 +41,7 @@ describe ElasticsearchAutocomplete do
   end
 
   it 'define to_indexed_json method' do
-    expect(ActiveModelUser.new(:full_name => 'test').to_indexed_json).to eq '{"id":null,"created_at":null,"full_name":"test"}'
+    expect(ActiveModelUser.new(full_name: 'test').to_indexed_json).to eq '{"id":null,"created_at":null,"full_name":"test"}'
   end
 
   describe 'default settings' do
@@ -52,8 +52,8 @@ describe ElasticsearchAutocomplete do
     end
 
     it 'allow to change default settings' do
-      ElasticsearchAutocomplete.defaults = {:attr => :test, :localized => true, :mode => :phrase, :index_prefix => 'test'}
-      expect(ElasticsearchAutocomplete.defaults).to eq ({:attr => :test, :localized => true, :mode => :phrase, :index_prefix => 'test'})
+      ElasticsearchAutocomplete.defaults = {attr: :test, localized: true, mode: :phrase, index_prefix: 'test'}
+      expect(ElasticsearchAutocomplete.defaults).to eq ({attr: :test, localized: true, mode: :phrase, index_prefix: 'test'})
     end
   end
 
@@ -65,7 +65,7 @@ describe ElasticsearchAutocomplete do
     end
 
     it 'eager loads the records from ac_search' do
-      results = ActiveModelUser.ac_search('Test User', :load => true)
+      results = ActiveModelUser.ac_search('Test User', load: true)
       expect(results.to_a).not_to be_empty
       results.map{|x| expect(x.is_a?(ActiveModelUser)).to eq true }
     end
@@ -107,13 +107,13 @@ describe ElasticsearchAutocomplete do
 
   describe 'indexing' do
     it 'enabled by default' do
-      record = ActiveModelUser.new(:full_name => 'test')
+      record = ActiveModelUser.new(full_name: 'test')
       expect(record).to receive(:tire).and_return(double('tire').as_null_object)
       record.save
     end
 
     it 'disabled' do
-      record = ActiveModelUser.new(:full_name => 'test')
+      record = ActiveModelUser.new(full_name: 'test')
       expect(record).not_to receive(:tire)
       ElasticsearchAutocomplete.without_indexing { record.save }
     end

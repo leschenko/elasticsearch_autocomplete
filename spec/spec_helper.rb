@@ -65,7 +65,7 @@ class StubModelBase < ActiveModelBase
 
   def self.populate
     test_data.each_with_index do |name, id|
-      u = new(:full_name => name)
+      u = new(full_name: name)
       u.id = id
       u.save
     end

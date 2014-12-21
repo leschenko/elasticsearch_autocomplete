@@ -5,9 +5,9 @@ class ActiveModelUserFilter < StubModelBase
 
   def self.test_data
     [
-        {:full_name => 'Laura Nelson', :interest_ids => [1, 2]},
-        {:full_name => 'Laura Flores', :interest_ids => [2, 3]},
-        {:full_name => 'Laura Larson', :interest_ids => [3, 4]}
+        {full_name: 'Laura Nelson', interest_ids: [1, 2]},
+        {full_name: 'Laura Flores', interest_ids: [2, 3]},
+        {full_name: 'Laura Larson', interest_ids: [3, 4]}
     ]
   end
 
@@ -36,33 +36,33 @@ describe 'search filters' do
   end
 
   it 'filter suggestions with terms' do
-    expect(@model.ac_search('Laura', :with => {:interest_ids => [2]}).map(&:full_name)).to match_array ['Laura Nelson', 'Laura Flores']
+    expect(@model.ac_search('Laura', with: {interest_ids: [2]}).map(&:full_name)).to match_array ['Laura Nelson', 'Laura Flores']
   end
 
   it 'accept coma separated string for filter' do
-    expect(@model.ac_search('Laura', :with => {:interest_ids => '1,4'}).map(&:full_name)).to match_array ['Laura Nelson', 'Laura Larson']
+    expect(@model.ac_search('Laura', with: {interest_ids: '1,4'}).map(&:full_name)).to match_array ['Laura Nelson', 'Laura Larson']
   end
 
   it 'filter suggestions without terms' do
-    expect(@model.ac_search('Laura', :without => {:interest_ids => [2]}).map(&:full_name)).to match_array ['Laura Larson']
+    expect(@model.ac_search('Laura', without: {interest_ids: [2]}).map(&:full_name)).to match_array ['Laura Larson']
   end
 
   it 'can order suggestions desc' do
-    res = @model.ac_search('Laura', :order => :id, :sort_mode => 'desc').map(&:id)
+    res = @model.ac_search('Laura', order: :id, sort_mode: 'desc').map(&:id)
     expect(res).to eq res.sort.reverse
   end
 
   it 'can order suggestions asc' do
-    res = @model.ac_search('Laura', :order => :id, :sort_mode => 'asc').map(&:id)
+    res = @model.ac_search('Laura', order: :id, sort_mode: 'asc').map(&:id)
     expect(res).to eq res.sort
   end
 
   it 'limit suggestions collection size' do
-    expect(@model.ac_search('Laura', :per_page => 1).to_a.length).to eq 1
+    expect(@model.ac_search('Laura', per_page: 1).to_a.length).to eq 1
   end
 
   it 'paginate suggestions' do
-    res = @model.ac_search('Laura', :per_page => 1, :page => 2).to_a
+    res = @model.ac_search('Laura', per_page: 1, page: 2).to_a
     expect(res.length).to eq 1
     expect(res.first.full_name).to eq 'Laura Flores'
   end

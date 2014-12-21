@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class ActiveModelProductFull < StubModelBase
-  ac_field :sku, :mode => :full
+  ac_field :sku, mode: :full
 
   def self.test_data
     ['SAMARA', 'A.3103', 'b A.3611', 'kac12 dk/sm']
@@ -9,7 +9,7 @@ class ActiveModelProductFull < StubModelBase
 
   def self.populate
     test_data.each_with_index do |name, id|
-      u = new(:sku => name)
+      u = new(sku: name)
       u.id = id
       u.save
     end
