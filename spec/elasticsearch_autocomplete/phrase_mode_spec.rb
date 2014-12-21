@@ -12,16 +12,16 @@ describe ':phrase mode autocomplete' do
   end
 
   it 'have :phrase mode' do
-    @model.ac_opts[:mode].should == :phrase
+    expect(@model.ac_opts[:mode]).to eq :phrase
   end
 
   it_behaves_like 'basic autocomplete', ActiveModelUserPhrase
 
   it 'don\'t suggest from the middle of the word' do
-    @model.ac_search('becca').to_a.should be_empty
+    expect(@model.ac_search('becca').to_a).to be_empty
   end
 
   it 'don\'t for each word of the source' do
-    @model.ac_search('Flores').map(&:full_name).should be_empty
+    expect(@model.ac_search('Flores').map(&:full_name)).to be_empty
   end
 end

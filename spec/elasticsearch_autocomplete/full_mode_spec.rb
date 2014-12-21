@@ -23,26 +23,26 @@ describe ':full mode autocomplete' do
   end
 
   it 'have :full mode' do
-    @model.ac_opts[:mode].should == :full
+    expect(@model.ac_opts[:mode]).to eq :full
   end
 
   it 'suggest for beginning of the source' do
-    @model.ac_search('A.31').to_a.should_not be_empty
+    expect(@model.ac_search('A.31').to_a).not_to be_empty
   end
 
   it 'suggest for for full match' do
-    @model.ac_search('SAMARA').to_a.should_not be_empty
+    expect(@model.ac_search('SAMARA').to_a).not_to be_empty
   end
 
   it 'don\'t suggest for unmatched term' do
-    @model.ac_search('kac3').to_a.should be_empty
+    expect(@model.ac_search('kac3').to_a).to be_empty
   end
 
   it 'suggest from the middle of the word' do
-    @model.ac_search('/sm').to_a.should_not be_empty
+    expect(@model.ac_search('/sm').to_a).not_to be_empty
   end
 
   it 'suggest with relevance order' do
-    @model.ac_search('A.3').map(&:sku).should == ['A.3103', 'b A.3611']
+    expect(@model.ac_search('A.3').map(&:sku)).to eq ['A.3103', 'b A.3611']
   end
 end

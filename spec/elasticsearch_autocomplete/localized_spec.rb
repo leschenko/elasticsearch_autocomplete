@@ -26,8 +26,8 @@ describe 'suggestions for localized attributes' do
   end
 
   it 'don\'t suggest from all locales' do
-    @model.ac_search('name_en first').to_a.should have(1).results
-    @model.ac_search('name_ru first').to_a.should have(1).results
-    @model.ac_search('name_ru').to_a.should have(2).results
+    expect(@model.ac_search('name_en first').to_a.length).to eq 1
+    expect(@model.ac_search('name_ru first').to_a.length).to eq 1
+    expect(@model.ac_search('name_ru').to_a.length).to eq 2
   end
 end
