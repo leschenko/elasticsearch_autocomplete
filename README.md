@@ -52,7 +52,7 @@ You can specify fields for suggestions search:
 
 ```ruby
 class User < ActiveRecord::Base
-  ac_field :full_name, :search_fields => [:full_name, :email]
+  ac_field :full_name, search_fields: [:full_name, :email]
 end
 ```
 
@@ -60,7 +60,7 @@ For search on localized fields such as `name_en`, `name_ru`:
 
 ```ruby
 class Product < ActiveRecord::Base
-  ac_field :name, :localized => true
+  ac_field :name, localized: true
 end
 ```
 
@@ -68,7 +68,7 @@ If you want to define settings and mapping for elasticsearch index yourselves:
 
 ```ruby
 class Product < ActiveRecord::Base
-  ac_field :name, :skip_settings => true
+  ac_field :name, skip_settings: true
 end
 ```
 

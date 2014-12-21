@@ -20,7 +20,7 @@ module ElasticsearchAutocomplete
 
         ac_setup_tire
 
-        class_attribute :ac_opts, :ac_attr, :ac_search_attrs, :ac_search_fields, :ac_mode_config, :instance_writer => false
+        class_attribute :ac_opts, :ac_attr, :ac_search_attrs, :ac_search_fields, :ac_mode_config, instance_writer: false
         options = args.extract_options!
         self.ac_opts = options.reverse_merge(ElasticsearchAutocomplete.defaults)
         self.ac_attr = args.first || ElasticsearchAutocomplete.defaults[:attr]
@@ -36,9 +36,9 @@ module ElasticsearchAutocomplete
 
     module ClassMethods
       def ac_search(query, options={})
-        options.reverse_merge!({:per_page => 50, :search_fields => ac_search_fields, :load => false})
+        options.reverse_merge!({per_page: 50, search_fields: ac_search_fields, load: false})
 
-        tire.search :per_page => options[:per_page], :page => options[:page], :load => options[:load] do
+        tire.search per_page: options[:per_page], page: options[:page], load: options[:load] do
           query do
             if query.size.zero?
               all
@@ -56,10 +56,10 @@ module ElasticsearchAutocomplete
             by(options[:order], options[:sort_mode] || 'asc') if options[:order].present?
           end
 
-          filter(:and, :filters => options[:with].map { |k, v| {:terms => {k => ElasticsearchAutocomplete.val_to_terms(v)}} }) if options[:with].present?
+          filter(:and, filters: options[:with].map { |k, v| {terms: {k => ElasticsearchAutocomplete.val_to_terms(v)}} }) if options[:with].present?
           if options[:without].present?
             options[:without].each do |k, v|
-              filter(:not, {:terms => {k => ElasticsearchAutocomplete.val_to_terms(v, true)}})
+              filter(:not, {terms: {k => ElasticsearchAutocomplete.val_to_terms(v, true)}})
             end
           end
         end
@@ -77,27 +77,27 @@ module ElasticsearchAutocomplete
       end
 
       def ac_index_config(attr, mode=:word)
-        defaults = {:type => 'string', :search_analyzer => 'ac_search', :include_in_all => false}
+        defaults = {type: 'string', search_analyzer: 'ac_search', include_in_all: false}
         fields = case mode
                    when :word
                      {
-                         attr => {:type => 'string'},
-                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram'),
-                         "#{ac_mode_config[:word]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram_word')
+                         attr => {type: 'string'},
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram'),
+                         "#{ac_mode_config[:word]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram_word')
                      }
                    when :phrase
                      {
-                         attr => {:type => 'string'},
-                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram')
+                         attr => {type: 'string'},
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram')
                      }
                    when :full
                      {
-                         attr => {:type => 'string'},
-                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram', :boost => 3),
-                         "#{ac_mode_config[:full]}_#{attr}" => defaults.merge(:index_analyzer => 'ac_edge_ngram_full')
+                         attr => {type: 'string'},
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram', boost: 3),
+                         "#{ac_mode_config[:full]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram_full')
                      }
                  end
-        {:type => 'multi_field', :fields => fields}
+        {type: 'multi_field', fields: fields}
       end
     end
 
