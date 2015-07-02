@@ -35,6 +35,11 @@ describe 'search filters' do
     @model.setup_index
   end
 
+  it 'filter suggestions with or terms' do
+    expect(@model.ac_search('Laura', or: [{interest_ids: [1]}, {interest_ids: '4'}]).map(&:full_name)).to\
+      match_array ['Laura Nelson', 'Laura Larson']
+  end
+
   it 'filter suggestions with terms' do
     expect(@model.ac_search('Laura', with: {interest_ids: [2]}).map(&:full_name)).to match_array ['Laura Nelson', 'Laura Flores']
   end
