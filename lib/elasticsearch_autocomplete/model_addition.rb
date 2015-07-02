@@ -57,7 +57,14 @@ module ElasticsearchAutocomplete
           end
 
           filter(:and, filters: options[:with].map { |k, v| {terms: {k => ElasticsearchAutocomplete.val_to_terms(v)}} }) if options[:with].present?
-          filter(:or, options[:or].map { |k, v| {terms: {k => ElasticsearchAutocomplete.val_to_terms(v)}} }) if options[:or].present?
+
+          if options[:or].present?
+            or_filters = Array(options[:or]).map do |filter|
+              {and: filter.map {|k, v| {terms: {k => ElasticsearchAutocomplete.val_to_terms(v)}}}}
+            end
+            filter(:or, or_filters)
+          end
+
           if options[:without].present?
             options[:without].each do |k, v|
               filter(:not, {terms: {k => ElasticsearchAutocomplete.val_to_terms(v, true)}})
