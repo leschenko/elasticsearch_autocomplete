@@ -11,7 +11,7 @@ module ElasticsearchAutocomplete
 
         after_save :ac_update_index
         after_destroy :ac_update_index
-        
+
         index_prefix ElasticsearchAutocomplete.defaults[:index_prefix] if ElasticsearchAutocomplete.defaults[:index_prefix]
       end
 
@@ -57,6 +57,7 @@ module ElasticsearchAutocomplete
           end
 
           filter(:and, filters: options[:with].map { |k, v| {terms: {k => ElasticsearchAutocomplete.val_to_terms(v)}} }) if options[:with].present?
+          filter(:or, options[:or].map { |k, v| {terms: {k => ElasticsearchAutocomplete.val_to_terms(v)}} }) if options[:or].present?
           if options[:without].present?
             options[:without].each do |k, v|
               filter(:not, {terms: {k => ElasticsearchAutocomplete.val_to_terms(v, true)}})
