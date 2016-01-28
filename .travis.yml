@@ -9,3 +9,5 @@ gemfile:
 rvm:
   - 1.9.3
   - 2.3.0
+
+sudo: false
