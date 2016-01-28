@@ -67,7 +67,7 @@ describe 'search filters' do
   end
 
   it 'paginate suggestions' do
-    res = @model.ac_search('Laura', per_page: 1, page: 2).to_a
+    res = @model.ac_search('Laura', order: :id, per_page: 1, page: 2).to_a
     expect(res.length).to eq 1
     expect(res.first.full_name).to eq 'Laura Flores'
   end
