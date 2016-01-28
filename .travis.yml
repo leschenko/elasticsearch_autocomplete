@@ -3,7 +3,7 @@ sudo: false
 language: ruby
 
 before_install:
-  - curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.1.1/elasticsearch-2.1.1.deb && sudo dpkg -i --force-confnew elasticsearch-2.1.1.deb
+  - curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.1.1/elasticsearch-2.1.1.deb && dpkg -i --force-confnew elasticsearch-2.1.1.deb
 
 services:
   - elasticsearch
