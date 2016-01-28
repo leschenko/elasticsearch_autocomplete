@@ -11,6 +11,8 @@ end
 
 I18n.available_locales = [:en, :ru]
 
+# ElasticsearchAutocomplete.elasticsearch_version = '1.x'
+
 class ActiveModelBase
   include ActiveModel::AttributeMethods
   include ActiveModel::Serialization

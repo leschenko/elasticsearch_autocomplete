@@ -86,23 +86,24 @@ module ElasticsearchAutocomplete
 
       def ac_index_config(attr, mode=:word)
         defaults = {type: 'string', search_analyzer: 'ac_search', include_in_all: false}
+        index_analyzer_key = ElasticsearchAutocomplete.es2? ? :analyzer : :index_analyzer
         fields = case mode
                    when :word
                      {
                          attr => {type: 'string'},
-                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram'),
-                         "#{ac_mode_config[:word]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram_word')
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(index_analyzer_key => 'ac_edge_ngram'),
+                         "#{ac_mode_config[:word]}_#{attr}" => defaults.merge(index_analyzer_key => 'ac_edge_ngram_word')
                      }
                    when :phrase
                      {
                          attr => {type: 'string'},
-                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram')
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(index_analyzer_key => 'ac_edge_ngram')
                      }
                    when :full
                      {
                          attr => {type: 'string'},
-                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram', boost: 3),
-                         "#{ac_mode_config[:full]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram_full')
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(index_analyzer_key => 'ac_edge_ngram', boost: 3),
+                         "#{ac_mode_config[:full]}_#{attr}" => defaults.merge(index_analyzer_key => 'ac_edge_ngram_full')
                      }
                  end
         {type: 'multi_field', fields: fields}

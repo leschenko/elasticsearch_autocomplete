@@ -9,6 +9,13 @@ module ElasticsearchAutocomplete
   mattr_accessor :enable_indexing
   self.enable_indexing = true
 
+  mattr_accessor :elasticsearch_version
+  self.elasticsearch_version = '2.x'
+
+  def self.es2?
+    elasticsearch_version && elasticsearch_version.start_with?('2')
+  end
+
   def self.default_index_prefix
     Object.const_defined?(:Rails) ? ::Rails.application.class.name.split('::').first.downcase : nil
   end
