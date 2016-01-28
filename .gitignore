@@ -21,4 +21,7 @@ tmp
 .rspec
 .ruby-version
 .ruby-gemset
+Vagrantfile
+.vagrant
 TODO
+.byebug_history
