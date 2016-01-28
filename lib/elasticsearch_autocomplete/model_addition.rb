@@ -28,7 +28,7 @@ module ElasticsearchAutocomplete
         self.ac_mode_config = ElasticsearchAutocomplete::MODES[ac_opts[:mode]]
 
         self.ac_search_attrs = ac_opts[:search_fields] || (ac_opts[:localized] ? I18n.available_locales.map { |l| "#{ac_attr}_#{l}" } : [ac_attr])
-        self.ac_search_fields = ac_search_attrs.map { |attr| ac_mode_config.values.map { |prefix| "#{prefix}_#{attr}" } }.flatten
+        self.ac_search_fields = ac_search_attrs.map { |attr| ac_mode_config.values.map { |prefix| "#{attr}.#{prefix}_#{attr}" } }.flatten
 
         define_ac_index(ac_opts[:mode]) unless options[:skip_settings]
       end
@@ -90,19 +90,19 @@ module ElasticsearchAutocomplete
                    when :word
                      {
                          attr => {type: 'string'},
-                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram'),
-                         "#{ac_mode_config[:word]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram_word')
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram'),
+                         "#{ac_mode_config[:word]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram_word')
                      }
                    when :phrase
                      {
                          attr => {type: 'string'},
-                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram')
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram')
                      }
                    when :full
                      {
                          attr => {type: 'string'},
-                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram', boost: 3),
-                         "#{ac_mode_config[:full]}_#{attr}" => defaults.merge(index_analyzer: 'ac_edge_ngram_full')
+                         "#{ac_mode_config[:base]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram', boost: 3),
+                         "#{ac_mode_config[:full]}_#{attr}" => defaults.merge(analyzer: 'ac_edge_ngram_full')
                      }
                  end
         {type: 'multi_field', fields: fields}
